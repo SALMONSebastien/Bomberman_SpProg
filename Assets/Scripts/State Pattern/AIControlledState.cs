@@ -6,6 +6,7 @@ public class AIControlledState : IPlayerState
 {
     public void EnterState(PlayerController player)
     {
+
         player.playerUp = KeyCode.None;
         player.playerDown = KeyCode.None;
         player.playerLeft = KeyCode.None;

@@ -6,11 +6,17 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+
+    [Header("IA")]
+
+    public bool isAIControlled = false;
+
+
     [Header("Basics Player")]
 
     [SerializeField]
     public Rigidbody2D rgb;
-    public bool isAIControlled = false;
+
 
     private IPlayerState currentState;
 
@@ -55,8 +61,6 @@ public class PlayerController : MonoBehaviour
         }
 
         currentState.EnterState(this);
-
-
     }
 
     private void Start()
