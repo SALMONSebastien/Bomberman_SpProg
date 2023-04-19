@@ -4222,6 +4222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rgb: {fileID: 1167454453}
+  isAIControlled: 1
   playerDirection: {x: 0, y: 0}
   playerSpeed: 6
   playerStrength: 3
@@ -4990,6 +4991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rgb: {fileID: 1847642525}
+  isAIControlled: 0
   playerDirection: {x: 0, y: 0}
   playerSpeed: 6
   playerStrength: 3

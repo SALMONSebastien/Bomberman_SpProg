@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     public Rigidbody2D rgb;
+    public bool isAIControlled = false;
+
+    private IPlayerState currentState;
 
     [SerializeField]
     private Vector2 playerDirection;
@@ -23,10 +26,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("Mapping Player")]
 
-    public KeyCode playerUp = KeyCode.Z;
-    public KeyCode playerDown = KeyCode.S;
-    public KeyCode playerLeft = KeyCode.Q;
-    public KeyCode playerRight = KeyCode.D;
+    public KeyCode playerUp = KeyCode.None;
+    public KeyCode playerDown = KeyCode.None;
+    public KeyCode playerLeft = KeyCode.None;
+    public KeyCode playerRight = KeyCode.None;
 
     [Header("Animations Player")]
 
@@ -42,6 +45,18 @@ public class PlayerController : MonoBehaviour
         rgb = GetComponent<Rigidbody2D>();
         activeSr = srDown;
 
+        if (!isAIControlled)
+        {
+            currentState = new PlayerControlledState();
+        }
+        else
+        {
+            currentState = new AIControlledState();
+        }
+
+        currentState.EnterState(this);
+
+
     }
 
     private void Start()
@@ -52,30 +67,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKey(playerUp))
-        {
-            SetPlayerDirection(Vector2.up, srUp);
-        }
-
-        else if (Input.GetKey(playerDown))
-        {
-            SetPlayerDirection(Vector2.down, srDown);
-        }
-
-        else if (Input.GetKey(playerLeft))
-        {
-            SetPlayerDirection(Vector2.left, srLeft);
-        }
-
-        else if (Input.GetKey(playerRight))
-        {
-            SetPlayerDirection(Vector2.right, srRight);
-        }
-
-        else
-        {
-            SetPlayerDirection(Vector2.zero, activeSr); // Contrairement aux autres, on garde actif le sprite actuel
-        }
+        PlayerControls();
 
     }
 
@@ -134,5 +126,40 @@ public class PlayerController : MonoBehaviour
         FindObjectOfType<GameManager>().Winner();   
             
      }
+
+    private void PlayerControls()
+    {
+        if (!isAIControlled)
+        {
+            if (Input.GetKey(playerUp))
+            {
+                SetPlayerDirection(Vector2.up, srUp);
+            }
+
+            else if (Input.GetKey(playerDown))
+            {
+                SetPlayerDirection(Vector2.down, srDown);
+            }
+
+            else if (Input.GetKey(playerLeft))
+            {
+                SetPlayerDirection(Vector2.left, srLeft);
+            }
+
+            else if (Input.GetKey(playerRight))
+            {
+                SetPlayerDirection(Vector2.right, srRight);
+            }
+
+            else
+            {
+                SetPlayerDirection(Vector2.zero, activeSr); // Contrairement aux autres, on garde actif le sprite actuel
+            }
+
+
+        }
+        
+
+    }
 
 }
