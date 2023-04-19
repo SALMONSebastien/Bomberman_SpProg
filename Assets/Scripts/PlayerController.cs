@@ -4,19 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPausable
 {
 
     [Header("IA")]
 
     public bool isAIControlled = false;
+    public bool isPlayer2 = false;
 
 
     [Header("Basics Player")]
 
     [SerializeField]
     public Rigidbody2D rgb;
-
+    public bool canBeControlled;
 
     private IPlayerState currentState;
 
@@ -37,6 +38,8 @@ public class PlayerController : MonoBehaviour
     public KeyCode playerLeft = KeyCode.None;
     public KeyCode playerRight = KeyCode.None;
 
+    public Image myIndication;
+
     [Header("Animations Player")]
 
     //Gestion des animations
@@ -55,9 +58,22 @@ public class PlayerController : MonoBehaviour
         {
             currentState = new PlayerControlledState();
         }
+
         else
         {
             currentState = new AIControlledState();
+            Destroy(myIndication);
+        }
+
+        if (isPlayer2)
+        {
+            string isAIControlledString = PlayerPrefs.GetString("isAIControlled");
+            if (!string.IsNullOrEmpty(isAIControlledString))
+            {
+                isAIControlledString = isAIControlledString.Trim();
+                isAIControlled = bool.Parse(isAIControlledString);
+
+            }
         }
 
         currentState.EnterState(this);
@@ -71,7 +87,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        PlayerControls();
+        if(!canBeControlled)
+        {
+            PlayerControls();
+        }
 
     }
 
@@ -133,6 +152,7 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerControls()
     {
+
         if (!isAIControlled)
         {
             if (Input.GetKey(playerUp))
@@ -162,8 +182,25 @@ public class PlayerController : MonoBehaviour
 
 
         }
-        
+
 
     }
 
+    public void OnPause()
+    {
+        canBeControlled = false;
+
+    }
+
+    public void OnResume()
+    {
+
+        canBeControlled = true;
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+
+    }
 }
